@@ -2,6 +2,7 @@ rm(list = ls())
 library(dplyr)
 library(readxl)
 library(tidyr)
+library(stringr)
 library(purrr)
 library(officer)
 
@@ -9,7 +10,7 @@ library(officer)
 base <- readxl::read_excel('./Arquivos/APP BOLETINS TECNICOS.xlsx',sheet = 'base') %>%
   janitor::clean_names() %>%
   tidyr::separate_rows(modelos, sep = ",\\s*") %>% 
-  mutate(nome_do_arquivo = paste0(codigo,'_',modelos,'_'))
+  mutate(nome_do_arquivo = paste0(codigo,'_',modelos,'_') %>% stringr::str_replace_all(pattern = ' ',replacement = '_'))
 
 
 # Função para criar um documento DOCX com uma linha como título
@@ -28,5 +29,5 @@ nomes_modelos <- base$nome_do_arquivo
 docs <- purrr::map(nomes_modelos, criar_docx)
 
 # Salvar cada documento em um arquivo separado com o nome do modelo
-walk2(docs, nomes_modelos, ~print(.x, target = paste0("Exemplo de Boletins/", .y, ".docx")))
+walk2(docs, nomes_modelos, ~print(.x, target = paste0("Exemplo de Boletins/", .y, "Restante do Titulo.docx")))
 
