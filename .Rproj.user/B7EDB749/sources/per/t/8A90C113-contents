@@ -1,0 +1,8 @@
+# Conta o número de documentos .docx no diretório
+num_docs=$(ls *.docx | wc -l)
+
+# Escreve o número de documentos na primeira linha do arquivo Lista.txt
+echo "Qtde Docs: $num_docs" > Lista.txt
+
+# Lista os documentos .docx, remove "_01" de cada linha, converte para minúsculas e acrescenta ao final do arquivo Lista.txt
+ls *.docx | sed 's/_01//g' | tr '[:upper:]' '[:lower:]' >> Lista.txt
